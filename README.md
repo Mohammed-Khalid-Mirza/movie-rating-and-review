@@ -2,6 +2,39 @@
 
 A modern, full-stack movie discovery and management platform built with Spring Boot and Next.js.
 
+## 📸 Screenshots
+
+| Homepage | Movie Library |
+| :---: | :---: |
+| ![Homepage](./images/homepage.png) | ![Movies](./images/movies.png) |
+
+| Watchlist | Admin Dashboard |
+| :---: | :---: |
+| ![Watchlist](./images/watchlist.png) | ![Admin](./images/admin.png) |
+
+| reviews | user management |
+| :---: | :---: |
+| ![Watchlist](./images/review.png) | ![Admin](./images/users.png) |
+
+| login | add movie |
+| :---: | :---: |
+| ![Watchlist](./images/login.png) | ![Admin](./images/add-movies.png) |
+
+
+## 🚀 Features
+
+- **Movie Discovery**: Advanced server-side filtering by genre and content type (Movies/Series).
+- **Pagination**: High-performance paginated movie listing with robust backend support.
+- **User Engagement**:
+  - Personal Watchlist for saving titles.
+  - Rating and Review system with interactive star feedback.
+  - Latest community reviews showcased on the homepage.
+- **Admin Dashboard**:
+  - Real-time statistics (Total Users, Movies, Reviews, Genres).
+  - Comprehensive content management (CRUD for Movies and Genres).
+  - Secure role-based access control.
+- **Design**: Premium glassmorphic UI with dark mode support and smooth animations.
+
 ## 🛠️ Tech Stack
 
 ### Backend
