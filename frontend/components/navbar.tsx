@@ -18,6 +18,7 @@ import {
 } from "@hugeicons/core-free-icons";
 import { ModeToggle } from "./mode-toggle";
 import { cn } from "@/lib/utils";
+import { SearchDialog } from "./search-dialog";
 
 const STORAGE_AUTH = "demo_jwt_auth";
 const API_BASE =
@@ -37,6 +38,7 @@ export default function Navbar() {
   const [role, setRole] = useState<UserRole | null>(null);
   const [isReady, setIsReady] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const isAuthPage = useMemo(
     () => pathname.startsWith("/login") || pathname.startsWith("/register"),
@@ -101,11 +103,11 @@ export default function Navbar() {
     { href: "/watchlist", label: "my watchlist", icon: Bookmark01Icon },
     { href: "/comments", label: "my reviews", icon: Comment01Icon },
     { href: "/movies", label: "Movies", icon: Film01Icon, variant: "outline" as const },
-    { href: "/search", label: "Search", icon: SearchIcon, variant: "outline" as const },
+    { id: "search-trigger", label: "Search", icon: SearchIcon, variant: "outline" as const, onClick: () => setIsSearchOpen(true) },
   ];
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border/60 bg-background/80 backdrop-blur-xl supports-backdrop-filter:bg-background/60">
+    <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-xl supports-backdrop-filter:bg-background/60">
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-4 py-4 md:px-6 lg:px-8">
         <Link href="/" className="group flex items-center gap-3">
           <div className="leading-tight">
@@ -118,9 +120,11 @@ export default function Navbar() {
         {/* Desktop Navigation */}
         <nav className="hidden md:flex flex-1 items-center justify-end gap-2 lg:gap-3">
           {navLinks.map((link) => (
-            <Link key={link.href} href={link.href}>
+            link.onClick ? (
               <Button
+                key={link.id}
                 variant={link.variant || "ghost"}
+                onClick={link.onClick}
                 className={cn(
                   "rounded-full px-4 text-foreground transition-all duration-300",
                   link.variant === "outline"
@@ -131,7 +135,22 @@ export default function Navbar() {
                 {link.icon && <HugeiconsIcon icon={link.icon} className={cn("h-4 w-4", link.variant === "outline" ? "mr-2" : "hidden")} />}
                 {link.label}
               </Button>
-            </Link>
+            ) : (
+              <Link key={link.href} href={link.href!}>
+                <Button
+                  variant={link.variant || "ghost"}
+                  className={cn(
+                    "rounded-full px-4 text-foreground transition-all duration-300",
+                    link.variant === "outline"
+                      ? "border-border bg-card/60 hover:bg-accent hover:text-accent-foreground"
+                      : "hover:bg-accent hover:text-accent-foreground"
+                  )}
+                >
+                  {link.icon && <HugeiconsIcon icon={link.icon} className={cn("h-4 w-4", link.variant === "outline" ? "mr-2" : "hidden")} />}
+                  {link.label}
+                </Button>
+              </Link>
+            )
           ))}
 
           {isAdmin && (
@@ -187,15 +206,30 @@ export default function Navbar() {
       >
         <div className="mx-auto flex flex-col gap-2 px-6">
           {navLinks.map((link) => (
-            <Link key={link.href} href={link.href} onClick={() => setIsMenuOpen(false)}>
+            link.onClick ? (
               <Button
+                key={link.id}
                 variant="ghost"
+                onClick={() => {
+                  link.onClick!();
+                  setIsMenuOpen(false);
+                }}
                 className="w-full justify-start rounded-xl px-4 py-6 text-lg font-medium text-foreground hover:bg-accent"
               >
                 <HugeiconsIcon icon={link.icon} className="mr-4 h-5 w-5 text-primary" />
                 {link.label}
               </Button>
-            </Link>
+            ) : (
+              <Link key={link.href} href={link.href!} onClick={() => setIsMenuOpen(false)}>
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start rounded-xl px-4 py-6 text-lg font-medium text-foreground hover:bg-accent"
+                >
+                  <HugeiconsIcon icon={link.icon} className="mr-4 h-5 w-5 text-primary" />
+                  {link.label}
+                </Button>
+              </Link>
+            )
           ))}
 
           {isAdmin && (
@@ -225,6 +259,8 @@ export default function Navbar() {
           )}
         </div>
       </div>
+
+      <SearchDialog isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </header>
   );
 }
